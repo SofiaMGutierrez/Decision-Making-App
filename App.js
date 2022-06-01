@@ -88,6 +88,26 @@ const HomeScreen = ({ navigation }) => {
   );
 };
 
+
+function LogChoiceTrial(action, Image1, Image2, time) {
+  this.action = action;
+  this.Image1 = Image1;
+  this.Image2 = Image2;
+  this.time = time;
+}
+
+function outputTableChoiceTrial(n, img1, img2) {
+  var timestamp = new Date();
+  if (n == 1){
+    var a = new LogChoiceTrial("User selected Image2", img1, img2, timestamp);
+    console.table([a]);
+  }
+  if (n == 0){
+    var a = new LogChoiceTrial("User selected Image1", img1, img2, timestamp);
+    console.table([a]);
+  }
+}
+
 const ChoiceTrialCost = ({ navigation }) => {
   // img randomization
   //var x = (Math.floor(Math.random() * 5 + 1));
@@ -112,10 +132,10 @@ const ChoiceTrialCost = ({ navigation }) => {
               source = {require('./assets/cost/' + costCategories[q1.b] + '/img1.JPG')}/>
           </View>
           <Pressable style={styles.choiceTrialButton1} onPress={() => navigation.push("cost")}>
-            <Text onClick={() => t1.addAnswer(-1)} style={styles.sub_title}>select</Text>
+            <Text onClick={() => {t1.addAnswer(-1); outputTableChoiceTrial(0, costCategories[q1.a], costCategories[q1.b]);}} style={styles.sub_title}>select</Text>
           </Pressable>
           <Pressable style={styles.choiceTrialButton2} onPress={() => navigation.push("cost")}>
-            <Text onClick={() => t1.addAnswer(1)} style={styles.sub_title}>select</Text>
+            <Text onClick={() => {t1.addAnswer(1); outputTableChoiceTrial(1, costCategories[q1.a], costCategories[q1.b]);}} style={styles.sub_title}>select</Text>
           </Pressable>
         </View>
       </View>
@@ -176,10 +196,10 @@ const ChoiceTrialReward = ({ navigation }) => {
                     source = {require('./assets/reward/' + rewardCategories[q2.b] + '/img1.JPG')}/>
             </View>
             <Pressable style={styles.choiceTrialButton1} onPress={() => navigation.push("reward")}>
-              <Text onClick={() => t2.addAnswer(-1)} style={styles.sub_title}>select</Text>
+              <Text onClick={() => {t2.addAnswer(-1); outputTableChoiceTrial(0, rewardCategories[q2.a], rewardCategories[q2.b]);}} style={styles.sub_title}>select</Text>
             </Pressable>
             <Pressable style={styles.choiceTrialButton2} onPress={() => navigation.push("reward")}>
-              <Text onClick={() => t2.addAnswer(1)} style={styles.sub_title}>select</Text>
+              <Text onClick={() => {t2.addAnswer(1); outputTableChoiceTrial(1, rewardCategories[q2.a], rewardCategories[q2.b]);}} style={styles.sub_title}>select</Text>
             </Pressable>
           </View>
         </View>
@@ -310,21 +330,21 @@ const SurpriseResultsReminderReward = ({ navigation }) => {
 
 
 
-function Log(action, graphCost, graphReward, time) {
+function LogSurpriseTrial(action, graphCost, graphReward, time) {
   this.action = action;
   this.graphCost = graphCost;
   this.graphReward = graphReward;
   this.time = time;
 }
 
-function outputTable(n, graph1, graph2) {
+function outputTableSurpriseTrial(n, graph1, graph2) {
   var timestamp = new Date();
   if (n == 1){
-    var a = new Log("User selected 'Yes'", graph1, graph2, timestamp)
+    var a = new LogSurpriseTrial("User selected Yes", graph1, graph2, timestamp);
     console.table([a]);
   }
   if (n == 0){
-    var a = new Log("User selected 'No'", graph1, graph2, timestamp)
+    var a = new LogSurpriseTrial("User selected No", graph1, graph2, timestamp);
     console.table([a]);
   }
 }
@@ -416,10 +436,10 @@ const SurpriseTrialChoicePage = ({ navigation }) => {
             source = {require('./assets/cost&rewardimages/graphs/reward/level' + random_output.split("")[1] + '.png')}/>
         </View>
         <Pressable style={styles.surpriseTrialButtonYes} onPress={() => navigation.push('randomImage')}>
-          <Text onClick={() => outputTable(1, random_output.split("")[0], random_output.split("")[1])} style={styles.text}>Yes</Text>
+          <Text onClick={() => outputTableSurpriseTrial(1, random_output.split("")[0], random_output.split("")[1])} style={styles.text}>Yes</Text>
         </Pressable>
         <Pressable style={styles.surpriseTrialButtonNo} onPress={() => navigation.push('continue')}>
-          <Text onClick={() => outputTable(0, random_output.split("")[0], random_output.split("")[1])} style={styles.text}>No</Text>
+          <Text onClick={() => outputTableSurpriseTrial(0, random_output.split("")[0], random_output.split("")[1])} style={styles.text}>No</Text>
         </Pressable>
       </View>
     </View>
