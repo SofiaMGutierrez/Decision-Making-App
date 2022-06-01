@@ -245,42 +245,33 @@ const ChoiceTrialReward = ({ navigation }) => {
 
 // SURPRISE TRIAL PIPELINE
 const SurpriseResultsReminderCost = ({ navigation }) => {
-  if(counter <= 25){
-    return (
-      <View>
-        <View style ={styles.container}>
-          <Text style={styles.sub_title3}>Your results for cost images:</Text>
-          <View style ={styles.imageContainer2}>
-            <Image resizeMode='contain'
-              style = {{width: Dimensions.get('window').width/10, height: Dimensions.get('window').width/2}}
-              source = {require('./assets/cost/' + output1[0] + '/img' + 1 + '.JPG')}/>
-            <Image resizeMode='contain'
-              style = {{width: Dimensions.get('window').width/10, height: Dimensions.get('window').width/2}}
-              source = {require('./assets/cost/' + output1[1] + '/img' + 1 + '.JPG')}/>
-            <Image resizeMode='contain'
-              style = {{width: Dimensions.get('window').width/10, height: Dimensions.get('window').width/2}}
-              source = {require('./assets/cost/' + output1[2] + '/img' + 1 + '.JPG')}/>
-            <Image resizeMode='contain'
-              style = {{width: Dimensions.get('window').width/10, height: Dimensions.get('window').width/2}}
-              source = {require('./assets/cost/' + output1[3] + '/img' + 1 + '.JPG')}/>
-            <Image resizeMode='contain'
-              style = {{width: Dimensions.get('window').width/10, height: Dimensions.get('window').width/2}}
-              source = {require('./assets/cost/' + output1[4] + '/img' + 1 + '.JPG')}/>
-          </View>
-          <Pressable style={styles.continueButton} onPress={() => navigation.push('rewardResults')}>
-            <Text style={styles.sub_title}>Continue</Text>
-          </Pressable>
-        </View>
-      </View>
-    );
-  }
-  else{
+  return (
     <View>
       <View style ={styles.container}>
-        <Text style={styles.sub_title3}>Your trial has ended</Text>
+        <Text style={styles.sub_title3}>Your results for cost images:</Text>
+        <View style ={styles.imageContainer2}>
+          <Image resizeMode='contain'
+            style = {{width: Dimensions.get('window').width/10, height: Dimensions.get('window').width/2}}
+            source = {require('./assets/cost/' + output1[0] + '/img' + 1 + '.JPG')}/>
+          <Image resizeMode='contain'
+            style = {{width: Dimensions.get('window').width/10, height: Dimensions.get('window').width/2}}
+            source = {require('./assets/cost/' + output1[1] + '/img' + 1 + '.JPG')}/>
+          <Image resizeMode='contain'
+            style = {{width: Dimensions.get('window').width/10, height: Dimensions.get('window').width/2}}
+            source = {require('./assets/cost/' + output1[2] + '/img' + 1 + '.JPG')}/>
+          <Image resizeMode='contain'
+            style = {{width: Dimensions.get('window').width/10, height: Dimensions.get('window').width/2}}
+            source = {require('./assets/cost/' + output1[3] + '/img' + 1 + '.JPG')}/>
+          <Image resizeMode='contain'
+            style = {{width: Dimensions.get('window').width/10, height: Dimensions.get('window').width/2}}
+            source = {require('./assets/cost/' + output1[4] + '/img' + 1 + '.JPG')}/>
+        </View>
+        <Pressable style={styles.continueButton} onPress={() => navigation.push('rewardResults')}>
+          <Text style={styles.sub_title}>Continue</Text>
+        </Pressable>
       </View>
     </View>
-  }
+  );
 };
 
 const SurpriseResultsReminderReward = ({ navigation }) => {
@@ -317,46 +308,26 @@ const SurpriseResultsReminderReward = ({ navigation }) => {
 
 
 
-var v;
-var trialsChosen;
-function surpriseTest1(n) {
-  trialsChosen = n;
-  console.log(n)
-  if (n == 25){
-    v = 1;
-  }
-  if (n == 50){
-    v = 2;
-  }
-  if (n == 75){
-    v = 3;
-  }
-  if (n == 100){
-    v = 4;
-  }
+
+
+function Log(action, graphCost, graphReward, time) {
+  this.action = action;
+  this.graphCost = graphCost;
+  this.graphReward = graphReward;
+  this.time = time;
 }
 
-function outputFunction(n, graph1, graph2,) {
+function outputTable(n, graph1, graph2) {
   var timestamp = new Date();
-  console.log(timestamp);
   if (n == 1){
-    console.log("Yes")
-    console.log("Cost:")
-    console.log(graph1, "/5")
-    console.log(graph2, "/5")
+    var a = new Log("User selected 'Yes'", graph1, graph2, timestamp)
+    console.table([a]);
   }
   if (n == 0){
-    console.log("No")
-    console.log("Reward:")
-    console.log(graph1, "/5")
-    console.log(graph2, "/5")
+    var a = new Log("User selected 'No'", graph1, graph2, timestamp)
+    console.table([a]);
   }
 }
-
-
-
-
-
 
 
 
@@ -387,7 +358,6 @@ const SelectNumberOfTrials = ({ navigation }) => {
 };
 
 // Generate all possible combinations
-// Initially 25 in total
 function allPossibleCombinations(input, length, curstr) {
   if(curstr.length == length) return [ curstr ];
   var ret = [];
@@ -397,32 +367,46 @@ function allPossibleCombinations(input, length, curstr) {
   return ret;
 }
 
-var counter = 0;
-const SurpriseTrialChoicePage = ({ navigation }) => {
-  counter ++;
-  var local_v = v;
-  var input = [ '1', '2', '3', '4', '5']; // 5 graphs
-  var possible_combos = allPossibleCombinations(input, 2, '');
-  if (local_v == 2){
-    [].push.apply(possible_combos, possible_combos);
+var input = [ '1', '2', '3', '4', '5']; // 5 graphs
+var possible_combos;
+var v;
+function surpriseTest1(n) {
+  possible_combos = allPossibleCombinations(input, 2, '');
+  if (n == 25){ // user selects 25 trials
+    v = 1;
+    return
   }
-  if (local_v == 3){
-    [].push.apply(possible_combos, possible_combos);
-    [].push.apply(possible_combos, possible_combos);
+  if (n == 50){ // user selects 50 trials
+    v = 2;
+    [].push.apply(possible_combos, possible_combos); // double array size
+    return
   }
-  if (local_v == 4){
+  if (n == 75){ // user selects 75 trials
+    v = 3;
+    [].push.apply(possible_combos, possible_combos); // triple array size
     [].push.apply(possible_combos, possible_combos);
-    [].push.apply(possible_combos, possible_combos);
-    [].push.apply(possible_combos, possible_combos);
+    return
   }
+  if (n == 100){ // user selects 100 trials
+    v = 4;
+    [].push.apply(possible_combos, possible_combos); // quadruple array size
+    [].push.apply(possible_combos, possible_combos);
+    [].push.apply(possible_combos, possible_combos);
+    return
+  }
+}
 
-  var random_index = Math.floor(Math.random() * possible_combos.length);
-  var random_output = possible_combos[random_index];
-  possible_combos.splice(random_index,1);
+const SurpriseTrialChoicePage = ({ navigation }) => {
+
+  var local_possible_combos = possible_combos;
+  var random_index = Math.floor(Math.random() * local_possible_combos.length);
+  var random_output = local_possible_combos[random_index]; // generating two random graphs
+  local_possible_combos.splice(random_index,1); // removes index selected
+
   return (
     <View>
       <View style ={styles.container}>
-        <Text style={styles.sub_title3}>Select "Yes" to either display a reward image of level 2 or a cost image of level 4. Select "No" to continue to next choice.</Text>
+        <Text style={styles.sub_title3}>Instructions here.</Text>
         <View style ={styles.imageContainer}>
           <Image resizeMode='contain'
             style = {{width: Dimensions.get('window').width/2, height: Dimensions.get('window').width/2}}
@@ -432,10 +416,10 @@ const SurpriseTrialChoicePage = ({ navigation }) => {
             source = {require('./assets/cost&rewardimages/graphs/reward/level' + random_output.split("")[1] + '.png')}/>
         </View>
         <Pressable style={styles.surpriseTrialButtonYes} onPress={() => navigation.push('randomImage')}>
-          <Text onClick={() => outputFunction(1, random_output.split("")[0], random_output.split("")[1])} style={styles.text}>Yes</Text>
+          <Text onClick={() => outputTable(1, random_output.split("")[0], random_output.split("")[1])} style={styles.text}>Yes</Text>
         </Pressable>
         <Pressable style={styles.surpriseTrialButtonNo} onPress={() => navigation.push('continue')}>
-          <Text onClick={() => outputFunction(0, random_output.split("")[0], random_output.split("")[1])} style={styles.text}>No</Text>
+          <Text onClick={() => outputTable(0, random_output.split("")[0], random_output.split("")[1])} style={styles.text}>No</Text>
         </Pressable>
       </View>
     </View>
@@ -455,7 +439,7 @@ const SurpriseOutputYes = ({ navigation }) => {
   return(
     <ImageBackground source={require('./assets/cost&rewardimages/output/' + image + '/img6.jpeg')} style={styles.image1}>
       <View>
-        <Pressable style={styles.continueButton} onPress={() => navigation.push('costResults')}>
+        <Pressable style={styles.continueButton} onPress={() => navigation.push('surprise')}>
           <Text style={styles.sub_title}>Continue</Text>
         </Pressable>
       </View>
@@ -467,7 +451,7 @@ const SurpriseOutputNo = ({ navigation }) => {
   return(
     <View>
       <View style ={styles.container}>
-        <Pressable style={styles.continueButton} onPress={() => navigation.push('costResults')}>
+        <Pressable style={styles.continueButton} onPress={() => navigation.push('surprise')}>
           <Text style={styles.sub_title}>Continue</Text>
         </Pressable>
       </View>
